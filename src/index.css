@@ -1,0 +1,129 @@
+@import "tailwindcss";
+
+@theme {
+  --color-surface: #fdf8f8;
+  --color-surface-dim: #ddd9d8;
+  --color-surface-bright: #fdf8f8;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #f7f3f2;
+  --color-surface-container: #f1edec;
+  --color-surface-container-high: #ebe7e6;
+  --color-surface-container-highest: #e5e2e1;
+  --color-on-surface: #1c1b1b;
+  --color-on-surface-variant: #444748;
+  --color-inverse-surface: #313030;
+  --color-inverse-on-surface: #f4f0ef;
+  --color-outline: #747878;
+  --color-outline-variant: #c4c7c7;
+  --color-primary: #000000;
+  --color-on-primary: #ffffff;
+  --color-secondary: #5e5f5c;
+  --color-on-secondary: #ffffff;
+  --color-tertiary-fixed: #d7ef30;
+  --color-on-tertiary-fixed: #191e00;
+  --color-tertiary-fixed-dim: #bbd200;
+  --color-tertiary-fixed-variant: #424b00;
+  --color-error: #ba1a1a;
+  --color-on-error: #ffffff;
+  --color-error-container: #ffdad6;
+  --color-primary-fixed: #e5e2e1;
+  --color-primary-fixed-dim: #c9c6c5;
+
+  /* Typography Design Tokens */
+  --font-arabic: 'IBM Plex Sans Arabic', sans-serif;
+  --font-latin: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-display: 'Space Grotesk', 'IBM Plex Sans Arabic', sans-serif;
+  --font-body: 'Inter', 'IBM Plex Sans Arabic', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-headline: 'Space Grotesk', 'IBM Plex Sans Arabic', sans-serif;
+  --font-brand: 'Syne', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+:root {
+  --font-arabic: 'IBM Plex Sans Arabic', sans-serif;
+  --font-latin: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-display: 'Space Grotesk', 'IBM Plex Sans Arabic', sans-serif;
+  --font-body: 'Inter', 'IBM Plex Sans Arabic', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-brand: 'Syne', sans-serif;
+}
+
+@layer base {
+  html, body {
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-body);
+    background-color: var(--color-surface);
+    color: var(--color-on-surface);
+    -webkit-tap-highlight-color: transparent;
+    overflow-x: hidden;
+    width: 100%;
+    touch-action: manipulation;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Arabic Natural Typography & Connection Protection */
+  html[dir="rtl"], [dir="rtl"], :lang(ar) {
+    font-family: var(--font-arabic), var(--font-body);
+    letter-spacing: normal !important;
+    word-spacing: normal;
+    line-height: 1.6;
+  }
+
+  [dir="rtl"] * {
+    letter-spacing: normal !important;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    text-wrap: balance;
+  }
+}
+
+/* Typography Utility Classes */
+.font-display {
+  font-family: var(--font-display);
+}
+
+.font-editorial {
+  font-family: var(--font-display);
+}
+
+.font-arabic {
+  font-family: var(--font-arabic);
+}
+
+.font-ui {
+  font-family: var(--font-body);
+}
+
+.font-brand {
+  font-family: var(--font-brand);
+}
+
+/* Mixed Arabic + Latin Bidi Isolation Utilities */
+.bidi-isolate {
+  unicode-bidi: isolate;
+  display: inline-block;
+}
+
+.bidi-text {
+  unicode-bidi: plaintext;
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Custom scrollbar hiding utility */
+.no-scrollbar::-webkit-scrollbar,
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar,
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}

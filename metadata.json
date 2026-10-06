@@ -1,0 +1,6 @@
+{
+  "name": "MORV Footwear Archive",
+  "description": "An international archival sneaker store, verified deadstock registry, and curated multi-brand gallery.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
