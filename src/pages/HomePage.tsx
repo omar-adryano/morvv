@@ -234,7 +234,7 @@ export const HomePage: React.FC = () => {
                 activeFilter === 'all' ? 'bg-black text-white font-semibold' : 'bg-[#f1edec] text-black hover:bg-[#ebe7e6]'
               }`}
             >
-              {t('allArchives')} ({PRODUCTS.length})
+              {t('allArchives')} ({catalogProducts.length})
             </button>
             <button
               onClick={() => setActiveFilter('recent')}
@@ -387,54 +387,68 @@ export const HomePage: React.FC = () => {
             </div>
 
             {/* Accompanying Item 1 */}
-            <div className="bg-white p-3 border border-[#e5e2e1] flex gap-3 items-center group">
-              <div className="w-20 h-20 bg-[#f7f3f2] p-1 shrink-0 flex items-center justify-center">
-                <img
-                  src={PRODUCTS[10].primaryImage}
-                  alt={PRODUCTS[10].name}
-                  className="w-full h-full object-contain mix-blend-multiply"
-                />
-              </div>
-              <div className="flex-1 min-w-0">
-                <span className="text-[11px] text-[#747878] block font-medium">Salomon</span>
-                <h4 className="text-xs sm:text-sm font-semibold text-black truncate">ACS Pro Advanced</h4>
-                <p className="text-xs text-[#5e5f5c] truncate">Metal / Frost OG</p>
-                <div className="flex items-center justify-between mt-1.5">
-                  <span className="text-xs font-bold text-black tabular-nums">{formatPrice(PRODUCTS[10].price)}</span>
-                  <button
-                    onClick={() => navigateTo('product', PRODUCTS[10])}
-                    className="text-xs font-semibold text-black hover:underline cursor-pointer"
-                  >
-                    {t('acquirePair')} →
-                  </button>
+            {(() => {
+              const item1 = catalogProducts[10] || PRODUCTS[0];
+              return (
+                <div className="bg-white p-3 border border-[#e5e2e1] flex gap-3 items-center group">
+                  <div className="w-20 h-20 bg-[#f7f3f2] p-1 shrink-0 flex items-center justify-center">
+                    <img
+                      src={item1.primaryImage}
+                      alt={item1.name}
+                      className="w-full h-full object-contain mix-blend-multiply"
+                    />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <span className="text-[11px] text-[#747878] block font-medium">{item1.brand}</span>
+                    <h4 className="text-xs sm:text-sm font-semibold text-black truncate">
+                      {language === 'ar' && item1.nameAr ? item1.nameAr : item1.name}
+                    </h4>
+                    <p className="text-xs text-[#5e5f5c] truncate">{item1.colorway}</p>
+                    <div className="flex items-center justify-between mt-1.5">
+                      <span className="text-xs font-bold text-black tabular-nums">{formatPrice(item1.price)}</span>
+                      <button
+                        onClick={() => navigateTo('product', item1)}
+                        className="text-xs font-semibold text-black hover:underline cursor-pointer"
+                      >
+                        {t('acquirePair')} →
+                      </button>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
+              );
+            })()}
 
             {/* Accompanying Item 2 */}
-            <div className="bg-white p-3 border border-[#e5e2e1] flex gap-3 items-center group">
-              <div className="w-20 h-20 bg-[#f7f3f2] p-1 shrink-0 flex items-center justify-center">
-                <img
-                  src={PRODUCTS[4].primaryImage}
-                  alt={PRODUCTS[4].name}
-                  className="w-full h-full object-contain mix-blend-multiply"
-                />
-              </div>
-              <div className="flex-1 min-w-0">
-                <span className="text-[11px] text-[#747878] block font-medium">Asics</span>
-                <h4 className="text-xs sm:text-sm font-semibold text-black truncate">GEL-Kayano 14</h4>
-                <p className="text-xs text-[#5e5f5c] truncate">Cream / Pure Silver</p>
-                <div className="flex items-center justify-between mt-1.5">
-                  <span className="text-xs font-bold text-black tabular-nums">{formatPrice(PRODUCTS[4].price)}</span>
-                  <button
-                    onClick={() => navigateTo('product', PRODUCTS[4])}
-                    className="text-xs font-semibold text-black hover:underline cursor-pointer"
-                  >
-                    {t('acquirePair')} →
-                  </button>
+            {(() => {
+              const item2 = catalogProducts[4] || PRODUCTS[1] || PRODUCTS[0];
+              return (
+                <div className="bg-white p-3 border border-[#e5e2e1] flex gap-3 items-center group">
+                  <div className="w-20 h-20 bg-[#f7f3f2] p-1 shrink-0 flex items-center justify-center">
+                    <img
+                      src={item2.primaryImage}
+                      alt={item2.name}
+                      className="w-full h-full object-contain mix-blend-multiply"
+                    />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <span className="text-[11px] text-[#747878] block font-medium">{item2.brand}</span>
+                    <h4 className="text-xs sm:text-sm font-semibold text-black truncate">
+                      {language === 'ar' && item2.nameAr ? item2.nameAr : item2.name}
+                    </h4>
+                    <p className="text-xs text-[#5e5f5c] truncate">{item2.colorway}</p>
+                    <div className="flex items-center justify-between mt-1.5">
+                      <span className="text-xs font-bold text-black tabular-nums">{formatPrice(item2.price)}</span>
+                      <button
+                        onClick={() => navigateTo('product', item2)}
+                        className="text-xs font-semibold text-black hover:underline cursor-pointer"
+                      >
+                        {t('acquirePair')} →
+                      </button>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
+              );
+            })()}
 
             {/* Archivist Direct Note */}
             <div className="p-4 bg-black text-white space-y-1">
@@ -601,7 +615,9 @@ export const HomePage: React.FC = () => {
                   </div>
                   <div className="text-left rtl:text-right">
                     <span className="text-xs text-[#747878] block">{t('entryPrice')}</span>
-                    <span className="text-xs font-bold text-black tabular-nums">{formatPrice(raffle.entryFee * 50)}</span>
+                    <span className="text-xs font-bold text-black tabular-nums">
+                      {raffle.entryFee === 0 ? (language === 'ar' ? 'دخول مجاني' : 'Free Entry') : formatPrice(raffle.entryFee)}
+                    </span>
                   </div>
 
                   {raffle.status === 'open' ? (

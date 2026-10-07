@@ -9,7 +9,6 @@ interface ProductCardProps {
 
 export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const { t, formatPrice, addToCart, isInWishlist, toggleWishlist, navigateTo, language } = useStore();
-  const [selectedQuickSize] = useState<string>(product.sizes[0]?.size || '42');
   const isWishlisted = isInWishlist(product.id);
 
   const getBadgeStyle = (badge?: string) => {
@@ -46,7 +45,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
       <div className="relative bg-[#f7f3f2] aspect-square overflow-hidden flex items-center justify-center p-2 sm:p-4">
         {/* Status Badge */}
         {product.badge && (
-          <div className="absolute top-2 left-2 z-10 max-w-[70%]">
+          <div className="absolute top-2 start-2 z-10 max-w-[70%]">
             <span className={`text-[10px] font-sans px-2 py-0.5 uppercase tracking-wide block truncate ${getBadgeStyle(product.badge)}`}>
               {product.badge}
             </span>
@@ -61,7 +60,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             e.stopPropagation();
             toggleWishlist(product.id);
           }}
-          className="absolute top-2 right-2 z-10 w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center bg-white/90 hover:bg-white text-black transition-colors rounded-none shadow-xs"
+          className="absolute top-2 end-2 z-10 w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center bg-white/90 hover:bg-white text-black transition-colors rounded-none shadow-xs cursor-pointer"
         >
           <Heart className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${isWishlisted ? 'fill-[#ba1a1a] text-[#ba1a1a]' : 'text-[#5e5f5c]'}`} />
         </button>
@@ -80,13 +79,14 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             <span>{t('quickAllocation')}</span>
             <span className="text-[#d7ef30] font-semibold">100% SPEC</span>
           </div>
-          <div className="grid grid-cols-4 gap-1 text-center font-sans text-xs">
-            {product.sizes.slice(0, 4).map((s) => (
+          <div className="grid grid-cols-6 gap-1 text-center font-sans text-xs">
+            {product.sizes.slice(0, 6).map((s) => (
               <button
                 key={s.size}
                 type="button"
                 onClick={(e) => handleQuickAdd(e, s.size)}
                 disabled={!s.inStock}
+                title={!s.inStock ? (language === 'ar' ? 'نفد من المخزون' : 'Out of stock') : undefined}
                 className={`py-1 transition-colors ${
                   s.inStock
                     ? 'bg-white/20 hover:bg-[#d7ef30] hover:text-[#191e00] text-white font-medium cursor-pointer'
@@ -127,14 +127,16 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
               {formatPrice(product.price)}
             </span>
             <span className="text-xs text-[#747878] hidden xs:inline font-sans">
-              EU {product.sizes[0]?.size.replace('EU ', '')} – {product.sizes[product.sizes.length - 1]?.size.replace('EU ', '')}
+              <bdi dir="ltr">EU {product.sizes[0]?.size.replace('EU ', '')} – {product.sizes[product.sizes.length - 1]?.size.replace('EU ', '')}</bdi>
             </span>
           </div>
 
           {/* Clean Mobile Fast Add Strip */}
-          <div className="md:hidden mt-2 pt-2 border-t border-[#f1edec] flex items-center justify-between">
-            <span className="text-[11px] text-[#747878] font-sans">
-              {product.sizes.filter(s => s.inStock).length} مقاسات
+          <div className="md:hidden mt-2 pt-2 border-t border-[#f1edec] flex items-center justify-between gap-1">
+            <span className="text-[11px] text-[#747878] font-sans truncate">
+              {language === 'ar'
+                ? `${product.sizes.filter(s => s.inStock).length} مقاسات`
+                : `${product.sizes.filter(s => s.inStock).length} Sizes`}
             </span>
             <button
               type="button"
@@ -143,9 +145,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                 const defaultSize = product.sizes.find(s => s.inStock)?.size || product.sizes[0]?.size || '42';
                 addToCart(product, defaultSize, 1);
               }}
-              className="px-2.5 py-1 bg-black text-white text-xs font-medium active:bg-[#d7ef30] active:text-black transition-colors"
+              className="px-2.5 py-1 bg-black text-white text-xs font-medium active:bg-[#d7ef30] active:text-black transition-colors shrink-0"
             >
-              + إضافة
+              {language === 'ar' ? '+ إضافة' : '+ Add'}
             </button>
           </div>
         </div>

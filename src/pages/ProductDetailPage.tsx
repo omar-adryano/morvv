@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useStore } from '../context/StoreContext';
 import { CURATED_LOOK_ITEMS, PRODUCTS } from '../data/products';
 import { CuratedLookItem } from '../types';
@@ -19,9 +19,10 @@ import {
 } from 'lucide-react';
 
 export const ProductDetailPage: React.FC = () => {
-  const { selectedProduct, addToCart, isInWishlist, toggleWishlist, formatPrice, navigateTo, t, language } = useStore();
+  const { selectedProduct, addToCart, isInWishlist, toggleWishlist, formatPrice, navigateTo, t, language, products } = useStore();
 
-  const product = selectedProduct || PRODUCTS[0];
+  const catalog = products && products.length > 0 ? products : PRODUCTS;
+  const product = selectedProduct || catalog[0];
 
   // Gallery Active Image
   const [activeImageIndex, setActiveImageIndex] = useState(0);
@@ -31,6 +32,11 @@ export const ProductDetailPage: React.FC = () => {
   const [selectedSize, setSelectedSize] = useState<string>(
     product.sizes.find((s) => s.inStock)?.size || product.sizes[0]?.size || '42'
   );
+
+  useEffect(() => {
+    setSelectedSize(product.sizes.find((s) => s.inStock)?.size || product.sizes[0]?.size || '42');
+    setActiveImageIndex(0);
+  }, [product.id]);
 
   // Size Selector Modal
   const [sizeModalOpen, setSizeModalOpen] = useState(false);
@@ -63,7 +69,7 @@ export const ProductDetailPage: React.FC = () => {
   const displayDescription = language === 'ar' && product.descriptionAr ? product.descriptionAr : product.description;
 
   return (
-    <div className="w-full flex flex-col bg-[#fdf8f8] font-sans">
+    <div className="w-full flex flex-col bg-[#fdf8f8] font-sans pb-24 md:pb-12">
       {/* Breadcrumb Bar */}
       <div className="w-full px-4 sm:px-6 md:px-12 py-3 bg-white border-b border-[#e5e2e1] text-xs text-[#5e5f5c]">
         <div className="flex items-center gap-2 overflow-x-auto no-scrollbar">
@@ -157,7 +163,7 @@ export const ProductDetailPage: React.FC = () => {
                   {product.brand}
                 </span>
                 <span className="text-[#191e00] bg-[#d7ef30] font-bold px-2 py-0.5 text-[11px]">
-                  {product.registryId || 'عينة معتمدة #041'}
+                  {product.registryId || (language === 'ar' ? 'عينة معتمدة #041' : 'SPECIMEN #041')}
                 </span>
               </div>
 
@@ -196,12 +202,18 @@ export const ProductDetailPage: React.FC = () => {
                 </div>
                 <div className="flex items-center gap-1.5 bg-[#f1edec] px-2.5 py-1 text-xs">
                   <span className="w-1.5 h-1.5 rounded-full bg-[#d7ef30]"></span>
-                  <span className="font-medium text-black">أفضل سعر موثق للمقتنين</span>
+                  <span className="font-medium text-black">
+                    {language === 'ar' ? 'أفضل سعر موثق للمقتنين' : 'Verified Collector Rate'}
+                  </span>
                 </div>
               </div>
 
               <div className="text-xs text-[#5e5f5c] flex items-center gap-1.5 flex-wrap">
-                <span>توصيل سريع ومجاني للطلبات فوق 2,500 ج.م في جميع محافظات مصر</span>
+                <span>
+                  {language === 'ar'
+                    ? 'توصيل سريع ومجاني للطلبات فوق 2,500 ج.م في جميع محافظات مصر'
+                    : 'Fast, complimentary insured dispatch over 2,500 EGP across Egypt'}
+                </span>
               </div>
             </div>
 
@@ -210,7 +222,9 @@ export const ProductDetailPage: React.FC = () => {
               <div className="flex items-center justify-between text-xs">
                 <div className="flex items-center gap-2">
                   <span className="text-black font-semibold">{t('selectSize')}</span>
-                  <span className="text-[#747878]">(مقاسات الاتحاد الأوروبي EU)</span>
+                  <span className="text-[#747878]">
+                    {language === 'ar' ? '(مقاسات الاتحاد الأوروبي EU)' : '(European Sizing EU)'}
+                  </span>
                 </div>
 
                 <button
@@ -223,7 +237,7 @@ export const ProductDetailPage: React.FC = () => {
               </div>
 
               {/* Size Selector Grid */}
-              <div className="grid grid-cols-4 sm:grid-cols-6 gap-2">
+              <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
                 {product.sizes.map((s) => {
                   const isSelected = selectedSize === s.size;
                   return (
@@ -232,6 +246,7 @@ export const ProductDetailPage: React.FC = () => {
                       type="button"
                       onClick={() => setSelectedSize(s.size)}
                       disabled={!s.inStock}
+                      title={!s.inStock ? (language === 'ar' ? 'نفد من المخزون' : 'Out of stock') : undefined}
                       className={`flex flex-col items-center justify-center p-2.5 transition-colors cursor-pointer border ${
                         isSelected
                           ? 'bg-black text-white border-black font-bold ring-1 ring-black'
@@ -243,10 +258,10 @@ export const ProductDetailPage: React.FC = () => {
                       <span className="text-sm font-semibold tabular-nums">EU {s.size.replace('EU ', '').replace('US ', '')}</span>
                       <span
                         className={`text-[10px] mt-0.5 tabular-nums ${
-                          isSelected ? 'text-[#d7ef30]' : 'text-[#5e5f5c]'
+                          isSelected ? 'text-[#d7ef30]' : s.inStock ? 'text-[#5e5f5c]' : 'text-[#ba1a1a]/60'
                         }`}
                       >
-                        {formatPrice(s.price)}
+                        {s.inStock ? formatPrice(s.price) : (language === 'ar' ? 'نفد' : 'Sold Out')}
                       </span>
                     </button>
                   );
@@ -259,7 +274,9 @@ export const ProductDetailPage: React.FC = () => {
                   <Check className="w-3.5 h-3.5 text-black" />
                   {t('trueToSize')}
                 </span>
-                <span className="font-semibold text-black">المقاس القياسي الموصى به</span>
+                <span className="font-semibold text-black">
+                  {language === 'ar' ? 'المقاس القياسي الموصى به' : 'Standard True-to-Size'}
+                </span>
               </div>
             </div>
 
@@ -353,16 +370,28 @@ export const ProductDetailPage: React.FC = () => {
                   <div className="px-4 pb-4 pt-1 text-xs text-[#5e5f5c] space-y-3 border-t border-[#f1edec]">
                     <ul className="space-y-1.5 text-xs">
                       <li className="flex justify-between p-2 bg-[#f7f3f2]">
-                        <span className="text-[#747878]">خامة الجزء العلوي</span>
-                        <span className="text-black font-semibold">{product.specs?.upper || 'جلد طبيعي فاخر 100%'}</span>
+                        <span className="text-[#747878]">
+                          {language === 'ar' ? 'خامة الجزء العلوي' : 'Upper Specification'}
+                        </span>
+                        <span className="text-black font-semibold">
+                          {product.specs?.upper || (language === 'ar' ? 'جلد طبيعي فاخر 100%' : '100% Premium Full Grain Leather')}
+                        </span>
                       </li>
                       <li className="flex justify-between p-2 bg-[#f7f3f2]">
-                        <span className="text-[#747878]">طوق الكاحل والبطانة</span>
-                        <span className="text-black font-semibold">{product.specs?.collar || 'جلد معالج مقاوم للتآكل'}</span>
+                        <span className="text-[#747878]">
+                          {language === 'ar' ? 'طوق الكاحل والبطانة' : 'Collar & Lining'}
+                        </span>
+                        <span className="text-black font-semibold">
+                          {product.specs?.collar || (language === 'ar' ? 'جلد معالج مقاوم للتآكل' : 'Weathered Split Protective Collar')}
+                        </span>
                       </li>
                       <li className="flex justify-between p-2 bg-[#f7f3f2]">
-                        <span className="text-[#747878]">تقنية النعل الأوسط</span>
-                        <span className="text-black font-semibold">{product.specs?.midsole || 'وسادة هوائية مضغوطة'}</span>
+                        <span className="text-[#747878]">
+                          {language === 'ar' ? 'تقنية النعل الأوسط' : 'Midsole Cushioning'}
+                        </span>
+                        <span className="text-black font-semibold">
+                          {product.specs?.midsole || (language === 'ar' ? 'وسادة هوائية مضغوطة' : 'Encapsulated Air Cushioning')}
+                        </span>
                       </li>
                     </ul>
                     <p className="leading-relaxed">
@@ -443,13 +472,35 @@ export const ProductDetailPage: React.FC = () => {
               </div>
 
               <div className="pt-4 mt-4 border-t border-[#f1edec] flex items-center justify-between">
-                <span className="text-xs text-[#747878]">تجهيز فوري مع الطلب</span>
+                <span className="text-xs text-[#747878]">
+                  {language === 'ar' ? 'تجهيز فوري مع الطلب' : 'Instant Order Dispatch'}
+                </span>
                 <button
                   type="button"
-                  onClick={() => addToCart(product, selectedSize, 1)}
+                  onClick={() => {
+                    const curatedProduct = {
+                      id: item.id,
+                      brand: item.brand,
+                      name: item.name,
+                      slug: item.id,
+                      description: item.description,
+                      price: item.price,
+                      primaryImage: item.image,
+                      images: [item.image],
+                      colors: ['Archive Black'],
+                      colorway: item.badge,
+                      sizes: [{ size: 'Standard', price: item.price, inStock: true, stock: 5 }],
+                      stock: 5,
+                      sku: `MORV-LOOK-${item.id}`,
+                      category: 'archive' as const,
+                      styleCode: `LOOK-${item.id}`,
+                      originYear: '2026'
+                    };
+                    addToCart(curatedProduct, 'Standard', 1);
+                  }}
                   className="px-3.5 py-1.5 bg-black hover:bg-[#313030] text-white text-xs font-semibold uppercase transition-colors cursor-pointer"
                 >
-                  + إضافة للحقيبة
+                  {language === 'ar' ? '+ إضافة للحقيبة' : '+ Add to Bag'}
                 </button>
               </div>
             </div>
@@ -462,22 +513,22 @@ export const ProductDetailPage: React.FC = () => {
         <div className="flex items-center justify-between mb-8 pb-3 border-b border-[#e5e2e1]">
           <div>
             <span className="text-xs text-[#747878] uppercase tracking-wide block mb-1">
-              عينات ذات صلة
+              {language === 'ar' ? 'عينات ذات صلة' : 'Related Specimens'}
             </span>
             <h2 className="font-display text-2xl font-bold text-black">
-              أحذية أرشيفية متوافقة
+              {language === 'ar' ? 'أحذية أرشيفية متوافقة' : 'Curated Footwear Pairings'}
             </h2>
           </div>
           <button
             onClick={() => navigateTo('shop')}
             className="text-xs font-semibold text-black hover:underline cursor-pointer"
           >
-            تصفح الكتالوج الكامل ←
+            {language === 'ar' ? 'تصفح الكتالوج الكامل ←' : 'Explore All Archives →'}
           </button>
         </div>
 
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
-          {PRODUCTS.filter((p) => p.id !== product.id).slice(0, 4).map((p) => (
+          {catalog.filter((p) => p.id !== product.id).slice(0, 4).map((p) => (
             <div
               key={p.id}
               onClick={() => {

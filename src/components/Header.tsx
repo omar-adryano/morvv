@@ -286,7 +286,7 @@ export const Header: React.FC = () => {
               </button>
               
               <div className="flex-1 flex items-center justify-center bg-[#f1edec] border border-[#e5e2e1] px-3 py-2 text-xs font-semibold text-black">
-                العملة: ج.م (EGP)
+                {language === 'ar' ? 'العملة: ج.م (EGP)' : 'Currency: EGP (ج.م)'}
               </div>
             </div>
 

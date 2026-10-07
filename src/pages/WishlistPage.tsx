@@ -5,9 +5,10 @@ import { ProductCard } from '../components/ProductCard';
 import { Heart } from 'lucide-react';
 
 export const WishlistPage: React.FC = () => {
-  const { wishlist, navigateTo, t, language } = useStore();
+  const { wishlist, navigateTo, t, language, products } = useStore();
 
-  const wishlistedProducts = PRODUCTS.filter((p) => wishlist.includes(p.id));
+  const catalog = products && products.length > 0 ? products : PRODUCTS;
+  const wishlistedProducts = catalog.filter((p) => wishlist.includes(p.id));
 
   return (
     <div className="w-full px-4 sm:px-6 md:px-12 py-8 sm:py-14 bg-[#fdf8f8] font-sans">
@@ -16,7 +17,7 @@ export const WishlistPage: React.FC = () => {
         <div className="border-b border-[#e5e2e1] pb-4 flex items-center justify-between">
           <div>
             <span className="text-xs text-[#747878] uppercase tracking-wide block mb-1">
-              قائمة الرغبات والمراقبة الخاصة
+              {language === 'ar' ? 'قائمة الرغبات والمراقبة الخاصة' : 'Private Watchlist & Acquisition Vault'}
             </span>
             <h1 className="font-display text-2xl sm:text-3xl font-bold text-black">
               {language === 'ar' ? 'خزينة المفضلة والمراقبة' : 'Vault Wishlist'}

@@ -232,8 +232,11 @@ export const StoreProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   };
 
   const formatPrice = (priceInEGP: number) => {
-    if (priceInEGP === undefined || priceInEGP === null || isNaN(priceInEGP)) return '0 ج.م';
-    return `${Math.round(priceInEGP).toLocaleString('en-US')} ج.م`;
+    if (priceInEGP === undefined || priceInEGP === null || isNaN(priceInEGP)) {
+      return language === 'ar' ? '0 ج.م' : '0 EGP';
+    }
+    const formatted = Math.round(priceInEGP).toLocaleString('en-US');
+    return language === 'ar' ? `${formatted} ج.م` : `${formatted} EGP`;
   };
 
   // 3. Products Catalog State (Admin <-> Storefront Live Sync)

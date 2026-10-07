@@ -24,12 +24,13 @@ export const ShopPage: React.FC = () => {
         return false;
       }
       // Family / Category filter
-      if (selectedFamily !== 'ALL' && product.category !== selectedFamily) {
+      if (selectedFamily !== 'ALL' && product.category?.toLowerCase() !== selectedFamily.toLowerCase()) {
         return false;
       }
       // Size filter
       if (selectedSize !== 'ALL') {
-        const hasSize = product.sizes.some((s) => s.size === selectedSize && s.inStock);
+        const cleanSelected = selectedSize.replace('EU ', '').trim();
+        const hasSize = product.sizes.some((s) => s.size.replace('EU ', '').trim() === cleanSelected && s.inStock);
         if (!hasSize) return false;
       }
       return true;
@@ -51,13 +52,13 @@ export const ShopPage: React.FC = () => {
 
   const brandTabs = [
     { id: 'ALL', label: t('allBrands'), count: catalogProducts.length },
-    { id: 'Jordan', label: 'Jordan Brand', count: catalogProducts.filter(p => p.brand.includes('JORDAN')).length },
-    { id: 'Nike', label: 'Nike Archive', count: catalogProducts.filter(p => p.brand.includes('NIKE')).length },
-    { id: 'New Balance', label: 'New Balance', count: catalogProducts.filter(p => p.brand.includes('NEW BALANCE')).length },
-    { id: 'Adidas', label: 'adidas Consortium', count: catalogProducts.filter(p => p.brand.includes('ADIDAS')).length },
-    { id: 'Salomon', label: 'Salomon Lab', count: catalogProducts.filter(p => p.brand.includes('SALOMON')).length },
-    { id: 'Asics', label: 'Asics SportStyle', count: catalogProducts.filter(p => p.brand.includes('ASICS')).length },
-    { id: 'Maison Margiela', label: 'Margiela 22', count: catalogProducts.filter(p => p.brand.includes('MARGIELA')).length },
+    { id: 'Jordan', label: 'Jordan Brand', count: catalogProducts.filter(p => p.brand.toUpperCase().includes('JORDAN')).length },
+    { id: 'Nike', label: 'Nike Archive', count: catalogProducts.filter(p => p.brand.toUpperCase().includes('NIKE')).length },
+    { id: 'New Balance', label: 'New Balance', count: catalogProducts.filter(p => p.brand.toUpperCase().includes('NEW BALANCE')).length },
+    { id: 'Adidas', label: 'adidas Consortium', count: catalogProducts.filter(p => p.brand.toUpperCase().includes('ADIDAS')).length },
+    { id: 'Salomon', label: 'Salomon Lab', count: catalogProducts.filter(p => p.brand.toUpperCase().includes('SALOMON')).length },
+    { id: 'Asics', label: 'Asics SportStyle', count: catalogProducts.filter(p => p.brand.toUpperCase().includes('ASICS')).length },
+    { id: 'Maison Margiela', label: 'Margiela 22', count: catalogProducts.filter(p => p.brand.toUpperCase().includes('MARGIELA')).length },
   ];
 
   const families = [
@@ -70,7 +71,7 @@ export const ShopPage: React.FC = () => {
     { id: 'archive', label: 'Heritage Archive' },
   ];
 
-  const sizeOptions = ['40', '41', '42', '43', '44', '45', '46'];
+  const sizeOptions = ['40', '41', '42', '43', '44', '45'];
 
   const clearFilters = () => {
     setSelectedBrand('ALL');
@@ -154,7 +155,7 @@ export const ShopPage: React.FC = () => {
                 title="Matrix View (4-Col)"
               >
                 <Grid className="w-3.5 h-3.5" />
-                <span className="hidden sm:inline">شبكة متقدمة</span>
+                <span className="hidden sm:inline">{language === 'ar' ? 'شبكة متقدمة' : 'Matrix (4X)'}</span>
               </button>
               <button
                 onClick={() => setGridDensity('editorial')}
@@ -164,23 +165,23 @@ export const ShopPage: React.FC = () => {
                 title="Editorial View (2-Col)"
               >
                 <Columns className="w-3.5 h-3.5" />
-                <span className="hidden sm:inline">عرض تحريري</span>
+                <span className="hidden sm:inline">{language === 'ar' ? 'عرض تحريري' : 'Editorial (2X)'}</span>
               </button>
             </div>
 
             {/* Sort Selector */}
             <div className="flex items-center bg-white border border-[#e5e2e1] px-3 py-1 text-xs">
-              <span className="text-[#747878] mr-2 hidden sm:inline">الترتيب:</span>
+              <span className="text-[#747878] mr-2 hidden sm:inline">{language === 'ar' ? 'الترتيب:' : 'Sort:'}</span>
               <select
                 aria-label="Sort Footwear Catalog"
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
                 className="bg-transparent text-black font-semibold focus:outline-none cursor-pointer text-xs"
               >
-                <option value="recent">الأحدث إضافة</option>
-                <option value="price-desc">السعر: من الأعلى للأقل</option>
-                <option value="price-asc">السعر: من الأقل للأعلى</option>
-                <option value="tier">أندر العينات الأرشيفية</option>
+                <option value="recent">{language === 'ar' ? 'الأحدث إضافة' : 'Recently Added'}</option>
+                <option value="price-desc">{language === 'ar' ? 'السعر: من الأعلى للأقل' : 'Price: High to Low'}</option>
+                <option value="price-asc">{language === 'ar' ? 'السعر: من الأقل للأعلى' : 'Price: Low to High'}</option>
+                <option value="tier">{language === 'ar' ? 'أندر العينات الأرشيفية' : 'Tier 0 / Deadstock'}</option>
               </select>
             </div>
           </div>
@@ -190,7 +191,7 @@ export const ShopPage: React.FC = () => {
         <div className="px-4 sm:px-6 md:px-12 py-2 bg-white flex flex-wrap items-center justify-between gap-3 text-xs border-t border-[#f1edec]">
           {/* Family Filters */}
           <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5">
-            <span className="text-[#747878] hidden md:inline text-xs font-medium">الفئة:</span>
+            <span className="text-[#747878] hidden md:inline text-xs font-medium">{language === 'ar' ? 'الفئة:' : 'Category:'}</span>
             {families.map((fam) => (
               <button
                 key={fam.id}
@@ -208,7 +209,7 @@ export const ShopPage: React.FC = () => {
 
           {/* Size Pills */}
           <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5">
-            <span className="text-[#747878] mr-1 hidden lg:inline text-xs font-medium">المقاس (EU):</span>
+            <span className="text-[#747878] mr-1 hidden lg:inline text-xs font-medium">{language === 'ar' ? 'المقاس (EU):' : 'Size (EU):'}</span>
             {sizeOptions.map((sz) => (
               <button
                 key={sz}
@@ -228,7 +229,7 @@ export const ShopPage: React.FC = () => {
         {/* Active Filter Badges */}
         <div className="px-4 sm:px-6 md:px-12 py-1.5 bg-[#fdf8f8] flex items-center justify-between border-t border-[#f1edec] text-xs">
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-[#747878]">التصفية النشطة:</span>
+            <span className="text-[#747878]">{language === 'ar' ? 'التصفية النشطة:' : 'Active Filters:'}</span>
             {selectedBrand !== 'ALL' && (
               <span className="bg-black text-white px-2 py-0.5 text-xs flex items-center gap-1">
                 <span>{selectedBrand}</span>
@@ -264,7 +265,9 @@ export const ShopPage: React.FC = () => {
           </div>
 
           <div className="text-xs text-[#747878] tabular-nums">
-            عرض {Math.min(visibleCount, sorted.length)} من {sorted.length} حذاء
+            {language === 'ar'
+              ? `عرض ${Math.min(visibleCount, sorted.length)} من ${sorted.length} حذاء`
+              : `Showing ${Math.min(visibleCount, sorted.length)} of ${sorted.length} pairs`}
           </div>
         </div>
       </div>
@@ -274,16 +277,18 @@ export const ShopPage: React.FC = () => {
         {sorted.length === 0 ? (
           <div className="w-full py-16 sm:py-20 text-center bg-white border border-[#e5e2e1] p-6 sm:p-8 space-y-3">
             <h3 className="font-display text-xl font-bold text-black">
-              لم يتم العثور على أحذية مطابقة لخيارات التصفية
+              {language === 'ar' ? 'لم يتم العثور على أحذية مطابقة لخيارات التصفية' : 'No specimens matched selected filters'}
             </h3>
             <p className="text-sm text-[#5e5f5c]">
-              يرجى تعديل خيارات المقاس أو الماركة أو الفئة لعرض المزيد من الأحذية الأرشيفية.
+              {language === 'ar'
+                ? 'يرجى تعديل خيارات المقاس أو الماركة أو الفئة لعرض المزيد من الأحذية الأرشيفية.'
+                : 'Try adjusting your size, brand, or category filters to explore more archival footwear.'}
             </p>
             <button
               onClick={clearFilters}
               className="mt-4 px-6 py-2.5 bg-black text-white text-xs font-semibold hover:bg-[#313030] transition-colors cursor-pointer"
             >
-              إعادة ضبط جميع خيارات التصفية
+              {language === 'ar' ? 'إعادة ضبط جميع خيارات التصفية' : 'Reset All Filters'}
             </button>
           </div>
         ) : (
@@ -304,8 +309,14 @@ export const ShopPage: React.FC = () => {
         {visibleCount < sorted.length && (
           <div className="mt-14 flex flex-col items-center justify-center gap-3 text-center max-w-md mx-auto">
             <div className="w-full flex items-center justify-between text-xs text-[#5e5f5c]">
-              <span>تم عرض {visibleCount} من {sorted.length} عينة</span>
-              <span className="tabular-nums">{Math.round((visibleCount / sorted.length) * 100)}% من الكتالوج</span>
+              <span>
+                {language === 'ar'
+                  ? `تم عرض ${Math.min(visibleCount, sorted.length)} من ${sorted.length} عينة`
+                  : `Showing ${Math.min(visibleCount, sorted.length)} of ${sorted.length} specimens`}
+              </span>
+              <span className="tabular-nums">
+                {Math.round((visibleCount / sorted.length) * 100)}% {language === 'ar' ? 'من الكتالوج' : 'of Catalog'}
+              </span>
             </div>
 
             <div className="w-full h-1 bg-[#e5e2e1] overflow-hidden">
@@ -319,11 +330,13 @@ export const ShopPage: React.FC = () => {
               onClick={() => setVisibleCount((prev) => prev + 12)}
               className="w-full sm:w-auto px-8 py-3 bg-black text-white text-xs font-semibold hover:bg-[#313030] transition-colors cursor-pointer min-h-[44px]"
             >
-              عرض 12 حذاء إضافي
+              {language === 'ar' ? 'عرض 12 حذاء إضافي' : 'Load 12 More Specimens'}
             </button>
 
             <span className="text-xs text-[#747878]">
-              شحن مؤمن بالكامل لجميع محافظات مصر مع شريحة توثيق NFC مرفقة مع كل طلب
+              {language === 'ar'
+                ? 'شحن مؤمن بالكامل لجميع محافظات مصر مع شريحة توثيق NFC مرفقة مع كل طلب'
+                : 'Insured priority dispatch across Egypt with NFC authenticity card included'}
             </span>
           </div>
         )}

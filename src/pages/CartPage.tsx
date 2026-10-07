@@ -49,7 +49,7 @@ export const CartPage: React.FC = () => {
         {/* Header */}
         <div className="border-b border-[#e5e2e1] pb-4 mb-8">
           <span className="text-xs text-[#747878] uppercase tracking-wide block mb-1">
-            حقيبة التسوق والطلب
+            {language === 'ar' ? 'حقيبة التسوق والطلب' : 'Shopping Bag & Dispatch'}
           </span>
           <h1 className="font-display text-2xl sm:text-3xl font-bold text-black">
             {t('cartTitle')}
@@ -152,14 +152,14 @@ export const CartPage: React.FC = () => {
                 type="text"
                 value={promoCode}
                 onChange={(e) => setPromoCode(e.target.value)}
-                placeholder="رمز الكوبون (مثال: MORV10)"
+                placeholder={language === 'ar' ? 'رمز الكوبون (مثال: MORV10)' : 'Coupon Code (e.g. MORV10)'}
                 className="flex-1 bg-[#f7f3f2] border border-[#e5e2e1] px-3.5 py-2 text-xs font-sans uppercase text-black placeholder:text-[#747878] focus:outline-none focus:border-black rounded-none"
               />
               <button
                 type="submit"
                 className="px-4 py-2 bg-black text-white text-xs font-semibold uppercase hover:bg-[#313030] transition-colors cursor-pointer"
               >
-                تطبيق
+                {language === 'ar' ? 'تطبيق' : 'Apply'}
               </button>
             </form>
 
@@ -171,7 +171,7 @@ export const CartPage: React.FC = () => {
 
               {discount > 0 && (
                 <div className="flex justify-between text-emerald-700 font-semibold">
-                  <span>خصم المقتنين:</span>
+                  <span>{language === 'ar' ? 'خصم المقتنين:' : 'Privilege Discount:'}</span>
                   <span className="tabular-nums">-{formatPrice(discount)}</span>
                 </div>
               )}

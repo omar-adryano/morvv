@@ -20,14 +20,12 @@ export const SizeSelectorModal: React.FC<SizeSelectorModalProps> = ({
   if (!isOpen) return null;
 
   const sizeConversions = [
+    { usM: '7.0', usW: '8.5', uk: '6.0', eu: '40.0' },
     { usM: '8.0', usW: '9.5', uk: '7.0', eu: '41.0' },
-    { usM: '8.5', usW: '10.0', uk: '7.5', eu: '42.0' },
-    { usM: '9.0 (المقاس القياسي)', usW: '10.5', uk: '8.0', eu: '42.5', highlight: true },
+    { usM: '8.5', usW: '10.0', uk: '7.5', eu: '42.0', highlight: true },
     { usM: '9.5', usW: '11.0', uk: '8.5', eu: '43.0' },
     { usM: '10.0', usW: '11.5', uk: '9.0', eu: '44.0' },
-    { usM: '10.5', usW: '12.0', uk: '9.5', eu: '44.5' },
     { usM: '11.0', usW: '12.5', uk: '10.0', eu: '45.0' },
-    { usM: '12.0', usW: '13.5', uk: '11.0', eu: '46.0' },
   ];
 
   return (
@@ -62,10 +60,10 @@ export const SizeSelectorModal: React.FC<SizeSelectorModalProps> = ({
         {/* Matrix Grid */}
         <div className="space-y-1 text-xs">
           <div className="grid grid-cols-4 bg-[#f1edec] p-2.5 text-[#5e5f5c] font-semibold text-xs">
-            <span>مقاس الاتحاد الأوروبي EU</span>
-            <span>المقاس الأمريكي رجالي</span>
-            <span>المقاس الأمريكي نسائي</span>
-            <span>المقاس البريطاني UK</span>
+            <span>{language === 'ar' ? 'مقاس الاتحاد الأوروبي EU' : 'EU Size'}</span>
+            <span>{language === 'ar' ? 'المقاس الأمريكي رجالي' : 'US Men'}</span>
+            <span>{language === 'ar' ? 'المقاس الأمريكي نسائي' : 'US Women'}</span>
+            <span>{language === 'ar' ? 'المقاس البريطاني UK' : 'UK Size'}</span>
           </div>
 
           {sizeConversions.map((row) => (

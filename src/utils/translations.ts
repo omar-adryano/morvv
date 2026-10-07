@@ -3,7 +3,7 @@ export type Language = 'ar' | 'en';
 export const translations = {
   ar: {
     // Header & Ticker
-    ticker: 'شحن أولوي عالمي // توثيق أصالة معتمد لجميع الإصدارات // شحن مجاني للطلبات فوق $250',
+    ticker: 'شحن أولوي بجميع المحافظات // توثيق أصالة معتمد لجميع الإصدارات // شحن مجاني للطلبات فوق 2,500 ج.م',
     authenticityGuarantee: 'ضمان الأصالة المطلق',
     concierge: 'خدمة كونسيرج الخاصة',
     brandArchive: 'الأرشيف',
@@ -153,7 +153,7 @@ export const translations = {
     quantity: 'الكمية:',
     subtotal: 'المجموع الفرعي',
     shipping: 'الشحن الأرشيفي السريع',
-    freeComplimentary: 'مجاني (فوق $250)',
+    freeComplimentary: 'مجاني (فوق 2,500 ج.م)',
     total: 'الإجمالي النهائي',
     proceedToCheckout: 'المتابعة إلى الدفع المشفر',
     freeShippingQualified: 'لقد تأهلت للشحن الدولي السريع المجاني ✓',
@@ -209,7 +209,7 @@ export const translations = {
   },
   en: {
     // Header & Ticker
-    ticker: 'WORLDWIDE PRIORITY DISPATCH // AUTHENTICITY CERTIFIED ON ALL EDITIONS // COMPLIMENTARY EXPRESS OVER $250',
+    ticker: 'EGYPT PRIORITY DISPATCH // AUTHENTICITY CERTIFIED ON ALL EDITIONS // COMPLIMENTARY EXPRESS OVER 2,500 EGP',
     authenticityGuarantee: 'AUTHENTICITY GUARANTEE',
     concierge: 'CONCIERGE',
     brandArchive: 'ARCHIVE',
@@ -359,7 +359,7 @@ export const translations = {
     quantity: 'QTY:',
     subtotal: 'SUBTOTAL',
     shipping: 'ESTIMATED DISPATCH',
-    freeComplimentary: 'COMPLIMENTARY OVER $250',
+    freeComplimentary: 'COMPLIMENTARY OVER 2,500 EGP',
     total: 'TOTAL',
     proceedToCheckout: 'PROCEED TO CHECKOUT',
     freeShippingQualified: 'You have unlocked complimentary global express dispatch ✓',
